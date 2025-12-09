@@ -2,6 +2,12 @@
   "expo": {
     "name": "Prevela",
     "slug": "Prevela",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "b9141ff1-b49e-4238-bfc7-c5991a078140"
+      }
+    },
+    "owner": "prevela"
   }
 }
