@@ -18,6 +18,6 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        paddingTop: 16 + (Platform.OS === 'android' ? StatusBar.currentHeight : 0),
     },
 });
