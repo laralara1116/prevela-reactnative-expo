@@ -4,9 +4,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 export default function Desejos() {
   return (
     <SafeAreaProvider>
-        <View style={styles.container}>
-            <Text>Perfil!</Text>
-        </View>
+      <View style={styles.container}>
+        <Text>Perfil!</Text>
+      </View>
     </SafeAreaProvider>
   );
 }
@@ -14,8 +14,6 @@ export default function Desejos() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingHorizontal: 16,
   },
 });

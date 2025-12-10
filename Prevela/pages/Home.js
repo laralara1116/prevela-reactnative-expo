@@ -5,9 +5,9 @@ import SearchTab from '../components/SearchTab';
 export default function Home() {
   return (
     <SafeAreaProvider>
-        <View style={styles.container}>
-            <SearchTab />
-        </View>
+      <View style={styles.container}>
+        <SearchTab />
+      </View>
     </SafeAreaProvider>
   );
 }

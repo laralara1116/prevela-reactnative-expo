@@ -4,9 +4,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 export default function Desejos() {
   return (
     <SafeAreaProvider>
-        <View style={styles.container}>
-          <Text>Desejos!</Text>
-        </View>
+      <View style={styles.container}>
+        <Text>Desejos!</Text>
+      </View>
     </SafeAreaProvider>
   );
 }
