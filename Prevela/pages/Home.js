@@ -1,12 +1,12 @@
-import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import BottomTab from '../components/BottomTab';
+import SearchTab from '../components/SearchTab';
 
 export default function Home() {
   return (
     <SafeAreaProvider>
-        <View style={styles.container}>
+        <View>
+            <SearchTab />
             <Text>Home!</Text>
         </View>
     </SafeAreaProvider>
