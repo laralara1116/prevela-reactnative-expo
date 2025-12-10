@@ -2,6 +2,10 @@ import { View, Text } from "react-native";
 import React from "react";
 import { BottomNavigation } from "react-native-paper";
 
+import Home from "../pages/Home";
+import Desejos from "../pages/Desejos";
+import Perfil from "../pages/Perfil";
+
 const routes = [
     { key: 'home', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
     { key: 'desejos', title: 'Desejos', focusedIcon: 'cards-heart', unfocusedIcon: 'cards-heart-outline' },
@@ -11,9 +15,9 @@ const routes = [
 const BottomTab = () => {
     const [index, setIndex] = React.useState(0);
     const renderScene = BottomNavigation.SceneMap({
-        home: () => <View></View>,
-        desejos: () => <View></View>,
-        perfil: () => <View></View>,
+        home: Home,
+        desejos: Desejos,
+        perfil: Perfil,
     });
 
     return (
