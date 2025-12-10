@@ -3,17 +3,17 @@ import React from "react";
 import { BottomNavigation } from "react-native-paper";
 
 const routes = [
-    { key: 'home', title: 'Home', focusedIcon: 'heart', unfocusedIcon: 'heart-outline'},
-    { key: 'desejos', title: 'Desejos', focusedIcon: 'album' },
-    { key: 'perfil', title: 'Perfil', focusedIcon: 'history' },
+    { key: 'home', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
+    { key: 'desejos', title: 'Desejos', focusedIcon: 'cards-heart', unfocusedIcon: 'cards-heart-outline' },
+    { key: 'perfil', title: 'Perfil', focusedIcon: 'account', unfocusedIcon: 'account-outline' },
 ];
 
 const BottomTab = () => {
     const [index, setIndex] = React.useState(0);
     const renderScene = BottomNavigation.SceneMap({
-        home: () => <View><Text>Home</Text></View>,
-        desejos: () => <View><Text>Desejos</Text></View>,
-        perfil: () => <View><Text>Perfil</Text></View>,
+        home: () => <View></View>,
+        desejos: () => <View></View>,
+        perfil: () => <View></View>,
     });
 
     return (
@@ -21,6 +21,10 @@ const BottomTab = () => {
             navigationState={{ index, routes }}
             onIndexChange={setIndex}
             renderScene={renderScene}
+            barStyle={{ backgroundColor: '#fff0fa' }}
+            theme={{ colors: { secondaryContainer: '#ffc9ef' } }}
+            activeColor="#210011"
+            inactiveColor="#210011"
         />
     );
 };
