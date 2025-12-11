@@ -7,7 +7,7 @@ export default function App() {
     <SafeAreaProvider>
       <View style={styles.container}>
         <StatusBar 
-          barStyle="dark-content"
+          barStyle="light-content"
         />
         <BottomTab />
       </View>
@@ -17,6 +17,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#FFFFFF',
         flex: 1,
         paddingTop: 16 + (Platform.OS === 'android' ? StatusBar.currentHeight : 0),
     },
