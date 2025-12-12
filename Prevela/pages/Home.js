@@ -8,7 +8,10 @@ export default function Home() {
     <SafeAreaProvider>
       <View style={styles.container}>
         <SearchTab />
-        <Product />
+        <Product
+        title='Karen Bachini Pó Facial Solto Rosa Pink Powder' 
+        imageUrl='https://res.cloudinary.com/dbkno7jw3/image/upload/v1765211207/P%C3%B3_Facial_Solto_Karen_Bachini_Beauty_j2m281.png'
+        />
       </View>
     </SafeAreaProvider>
   );

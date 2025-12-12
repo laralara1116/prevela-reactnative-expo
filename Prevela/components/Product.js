@@ -1,19 +1,21 @@
 import { Card, Text, Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
+import { RenderStar } from './RenderStar';
 
 const Product = ({ 
   title = "Produto", 
   average = "0,0",
-  reviews = 0 
+  reviews = 0,
+  imageUrl= ''
 }) => (
   <Card style={styles.card}>
-    <Card.Cover style={styles.cardImage} source={{ uri: '' }} />
+    <Card.Cover style={styles.cardImage} source={{ uri: imageUrl }} />
     <Card.Content style={styles.content}>
       <Text variant="bodyLarge" style={styles.title} numberOfLines={3}>
         {title}
       </Text>
       <Text variant="bodyLarge" style={styles.averege}>
-        {average}
+         {average} {RenderStar(average)}
       </Text>
       <Text variant="bodySmall" style={styles.reviews}>
         {reviews} Avaliações
@@ -22,7 +24,7 @@ const Product = ({
     <Card.Actions>
         <Button style={styles.button}
          mode="contained"
-         buttonColor='#fff0fa'
+         buttonColor='#fed0ef'
          textColor='#210011'>
             Ver Produto
         </Button>
