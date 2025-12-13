@@ -1,6 +1,5 @@
 import React from "react";
 import { BottomNavigation } from "react-native-paper";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import Home from "../pages/Home";
 import Desejos from "../pages/Desejos";
 import Perfil from "../pages/Perfil";
@@ -13,6 +12,7 @@ const routes = [
 
 const BottomTab = () => {
     const [index, setIndex] = React.useState(0);
+    
     const renderScene = BottomNavigation.SceneMap({
         home: Home,
         desejos: Desejos,
@@ -20,17 +20,15 @@ const BottomTab = () => {
     });
 
     return (
-        <SafeAreaProvider>
-            <BottomNavigation
-                navigationState={{ index, routes }}
-                onIndexChange={setIndex}
-                renderScene={renderScene}
-                barStyle={{ backgroundColor: '#fff0fa' }}
-                theme={{ colors: { secondaryContainer: '#ffc9ef' } }}
-                activeColor="#210011"
-                inactiveColor="#210011"
-            />
-        </SafeAreaProvider>
+        <BottomNavigation
+            navigationState={{ index, routes }}
+            onIndexChange={setIndex}
+            renderScene={renderScene}
+            barStyle={{ backgroundColor: '#fff0fa' }}
+            theme={{ colors: { secondaryContainer: '#ffc9ef' } }}
+            activeColor="#210011"
+            inactiveColor="#210011"
+        />
     );
 };
 
