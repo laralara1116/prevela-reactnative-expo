@@ -2,6 +2,7 @@ import { Card, Text, Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RenderStar } from './RenderStar';
+import { CommonActions } from '@react-navigation/native';
 
 const Product = ({
   id,
@@ -11,6 +12,20 @@ const Product = ({
   imageUrl = '',
 }) => {
   const navigation = useNavigation();
+
+  const handlePress = () => {
+    try {
+      navigation.navigate("ProductDetails", { 
+        id, 
+        title, 
+        average, 
+        reviews, 
+        imageUrl 
+      });
+    } catch (error) {
+      console.log("Navigation error:", error);
+    }
+  };
 
   return (
     <Card style={styles.card}>
@@ -29,13 +44,7 @@ const Product = ({
       <Card.Actions>
         <Button 
           style={styles.button}
-          onPress={() => navigation.navigate("ProductDetails", { 
-            id, 
-            title, 
-            average, 
-            reviews, 
-            imageUrl 
-          })}
+          onPress={handlePress}
           mode="contained"
           buttonColor='#fed0ef'
           textColor='#210011'
