@@ -11,6 +11,7 @@ return (
       <Searchbar
         placeholder="Digite seu produto"
         onChangeText={setSearchQuery}
+        elevation={1}
         value={searchQuery}
         style={styles.searchbar}
       />
@@ -21,6 +22,7 @@ return (
 const styles = StyleSheet.create({
   searchbar: {
     backgroundColor: '#fff0fa',
+    shadowColor: '#000',
   },
 });
 
