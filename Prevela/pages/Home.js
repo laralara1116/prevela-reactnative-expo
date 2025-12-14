@@ -41,7 +41,7 @@ export default function Home() {
         numColumns={2}
         renderItem={({item}) => (
           <View style={styles.productWrapper}>
-            <View style={styles.card}>
+            <View>
               <Product
                 id={item.id}
                 title={item.nome}
@@ -84,6 +84,6 @@ const styles = StyleSheet.create({
     width: '50%',
     alignItems: 'center',
     paddingHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 'auto',
   },
 });
