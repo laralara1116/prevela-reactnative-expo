@@ -1,7 +1,7 @@
 import React from "react";
 import { Searchbar } from 'react-native-paper';
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StyleSheet } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const SearchTab = () => {
 const [searchQuery, setSearchQuery] = React.useState('');

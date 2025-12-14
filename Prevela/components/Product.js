@@ -28,7 +28,9 @@ const Product = ({
   };
 
   return (
-    <Card style={styles.card}>
+    <Card style={styles.card}
+    onPress={handlePress}
+    >
       <Card.Cover style={styles.cardImage} source={{ uri: imageUrl }} />
       <Card.Content style={styles.content}>
         <Text variant="bodyLarge" style={styles.title} numberOfLines={3}>
