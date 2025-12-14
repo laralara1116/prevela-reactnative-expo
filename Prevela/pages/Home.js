@@ -1,43 +1,58 @@
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, FlatList, Image } from 'react-native';
+import { useEffect, useState } from 'react';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../Firebase';
 import SearchTab from '../components/SearchTab';
 import Product from '../components/Product';
 
 export default function Home() {
+  const [produtos, setProdutos] = useState([]);
+
+  useEffect(() => {
+    const produtosRef = ref(database, "produtos");
+
+    onValue(produtosRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const lista = Object.entries(data).map(([id, produto]) => ({
+          id,
+          nome: produto.nome,
+          img: produto.img,
+          average: produto.average || "0,0",
+          reviews: produto.reviews || 0,
+        }));
+
+        setProdutos(lista);
+      }
+    });
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <SearchTab />
       </View>
+      <Text style={styles.greeting}>Que bom te ver!</Text>
 
-      <ScrollView>
-        <Text style={styles.greeting}>Que bom te ver!</Text>
-
-        <View style={styles.card}>
+      <FlatList
+        data={produtos}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        renderItem={({item}) => (
           <View style={styles.productWrapper}>
-            <Product
-              id="1"
-              title="Karen Bachini Pó Facial Solto Rosa Pink Powder"
-              imageUrl="https://res.cloudinary.com/dbkno7jw3/image/upload/v1765211207/P%C3%B3_Facial_Solto_Karen_Bachini_Beauty_j2m281.png"
-            />
+            <View style={styles.card}>
+              <Product
+                id={item.id}
+                title={item.nome}
+                imageUrl={item.img}
+                average={item.average ?? "0,0"}
+                reviews={item.reviews ?? 0}
+              />
+            </View>
           </View>
-
-          <View style={styles.productWrapper}>
-            <Product
-              id="2"
-              title="contém1g Paleta de Sombras Electric Purple"
-              imageUrl="https://res.cloudinary.com/dbkno7jw3/image/upload/v1765211218/Paleta_de_Sombras_Cont%C3%A9m_1g_rrqfmo.png"
-            />
-          </View>
-
-          <View style={styles.productWrapper}>
-            <Product
-              id="3"
-              title="Vizzela Gotas Fix Blindagem"
-              imageUrl="https://res.cloudinary.com/dbkno7jw3/image/upload/v1765211188/Gotas_Fix_Blindagem_Vizzela_zcn8wx.png"
-            />
-          </View>
-        </View>
-      </ScrollView>
+        )}
+      />
     </View>
   );
 }
