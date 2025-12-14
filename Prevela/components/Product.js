@@ -28,12 +28,10 @@ const Product = ({
   };
 
   return (
-    <Card style={styles.card}
-    onPress={handlePress}
-    >
+    <Card style={styles.card} onPress={handlePress}>
       <Card.Cover style={styles.cardImage} source={{ uri: imageUrl }} />
       <Card.Content style={styles.content}>
-        <Text variant="bodyLarge" style={styles.title} numberOfLines={3}>
+        <Text variant="titleMedium" style={styles.title} numberOfLines={3} ellipsizeMode="tail">
           {title}
         </Text>
         <Text variant="bodyLarge" style={styles.averege}>
@@ -43,7 +41,7 @@ const Product = ({
           {reviews} Avaliações
         </Text>
       </Card.Content>
-      <Card.Actions>
+      <Card.Actions style={styles.actions}>
         <Button 
           style={styles.button}
           onPress={handlePress}
@@ -63,6 +61,7 @@ const styles = StyleSheet.create({
     width: 160,
     margin: 16,
     backgroundColor: '#FFFFFF',
+    justifyContent: 'space-between',
   },
   cardImage: {
     width: 160,
@@ -71,11 +70,12 @@ const styles = StyleSheet.create({
   content: {
     paddingTop: 8,
     paddingBottom: 8,
+    minHeight: 130,
   },
   title: {
     fontWeight: 'bold',
     marginBottom: 4,
-    minHeight: 40, 
+    lineHeight: 23,
   },
   averege: {
     fontWeight: 'bold',
@@ -83,6 +83,9 @@ const styles = StyleSheet.create({
   },
   reviews: {
     color: '#666',
+  },
+  actions: {
+    marginTop: 'auto',
   },
   button: {
     width: '100%',
