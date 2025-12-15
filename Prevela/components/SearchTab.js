@@ -1,12 +1,12 @@
-import React from "react";
-import { Searchbar } from 'react-native-paper';
+import React from 'react';
 import { StyleSheet } from 'react-native';
+import { Searchbar } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const SearchTab = () => {
-const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState('');
 
-return (
+  return (
     <SafeAreaProvider>
       <Searchbar
         placeholder="Digite seu produto"

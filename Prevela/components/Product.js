@@ -1,11 +1,11 @@
-import { Card, Text, Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
+import { Card, Text, Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { RenderStar } from './RenderStar';
 
 const Product = ({
   id,
-  title = "Produto", 
+  title = "Produto",
   average = "0,0",
   reviews = 0,
   imageUrl = '',
@@ -14,12 +14,12 @@ const Product = ({
 
   const handlePress = () => {
     try {
-      navigation.navigate("ProductDetails", { 
-        id, 
-        title, 
-        average, 
-        reviews, 
-        imageUrl 
+      navigation.navigate("ProductDetails", {
+        id,
+        title,
+        average,
+        reviews,
+        imageUrl
       });
     } catch (error) {
       console.log("Navigation error:", error);
@@ -28,20 +28,32 @@ const Product = ({
 
   return (
     <Card style={styles.card} onPress={handlePress}>
-      <Card.Cover style={styles.cardImage} source={{ uri: imageUrl }} />
+      <Card.Cover 
+        style={styles.cardImage} 
+        source={{ uri: imageUrl }} 
+      />
+      
       <Card.Content style={styles.content}>
-        <Text variant="titleMedium" style={styles.title} numberOfLines={3} ellipsizeMode="tail">
+        <Text 
+          variant="titleMedium" 
+          style={styles.title} 
+          numberOfLines={3} 
+          ellipsizeMode="tail"
+        >
           {title}
         </Text>
-        <Text variant="bodyLarge" style={styles.averege}>
+        
+        <Text variant="bodyLarge" style={styles.average}>
           {average} {RenderStar(average)}
         </Text>
+        
         <Text variant="bodySmall" style={styles.reviews}>
           {reviews} Avaliações
         </Text>
       </Card.Content>
+      
       <Card.Actions style={styles.actions}>
-        <Button 
+        <Button
           style={styles.button}
           onPress={handlePress}
           mode="contained"
@@ -76,7 +88,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     lineHeight: 23,
   },
-  averege: {
+  average: {
     fontWeight: 'bold',
     marginBottom: 2,
   },

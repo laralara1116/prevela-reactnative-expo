@@ -13,8 +13,8 @@ export default function Desejos() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
     flex: 1,
     paddingHorizontal: 16,
+    backgroundColor: '#FFFFFF',
   },
 });

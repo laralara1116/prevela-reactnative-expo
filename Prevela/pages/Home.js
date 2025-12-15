@@ -1,5 +1,5 @@
-import { ScrollView, StyleSheet, View, Text, FlatList, Image } from 'react-native';
 import { useEffect, useState } from 'react';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { ref, onValue } from 'firebase/database';
 import { database } from '../Firebase';
 import SearchTab from '../components/SearchTab';
@@ -33,23 +33,22 @@ export default function Home() {
       <View style={styles.searchContainer}>
         <SearchTab />
       </View>
+
       <Text style={styles.greeting}>Que bom te ver!</Text>
 
       <FlatList
         data={produtos}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <View style={styles.productWrapper}>
-            <View>
-              <Product
-                id={item.id}
-                title={item.nome}
-                imageUrl={item.img}
-                average={item.average ?? "0,0"}
-                reviews={item.reviews ?? 0}
-              />
-            </View>
+            <Product
+              id={item.id}
+              title={item.nome}
+              imageUrl={item.img}
+              average={item.average ?? "0,0"}
+              reviews={item.reviews ?? 0}
+            />
           </View>
         )}
       />
@@ -62,23 +61,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
-  scroll: {
-    flex: 1,
-  },
   searchContainer: {
+    flexDirection: 'row',
     paddingHorizontal: 16,
     paddingBottom: 16,
-    flexDirection: 'row',
   },
   greeting: {
     fontSize: 26,
     paddingHorizontal: 16,
     marginBottom: 16,
-  },
-  card: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
   },
   productWrapper: {
     width: '50%',

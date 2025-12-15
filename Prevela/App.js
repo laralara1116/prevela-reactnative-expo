@@ -1,12 +1,11 @@
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { useState, useEffect } from 'react';
 import { StatusBar } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-
 import Home from './pages/Home';
 import Desejos from './pages/Desejos';
 import Perfil from './pages/Perfil';
@@ -27,41 +26,43 @@ function TabNavigator() {
         tabBarActiveBackgroundColor: '#ffc9ef',
       }}
     >
-      <Tab.Screen 
-        name="Home" 
+      <Tab.Screen
+        name="Home"
         component={Home}
         options={{
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons 
-              name={focused ? 'home' : 'home-outline'} 
-              size={24} 
-              color="#210011" 
+            <MaterialCommunityIcons
+              name={focused ? 'home' : 'home-outline'}
+              size={24}
+              color="#210011"
             />
           ),
         }}
       />
-      <Tab.Screen 
-        name="Desejos" 
+
+      <Tab.Screen
+        name="Desejos"
         component={Desejos}
         options={{
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons 
-              name={focused ? 'cards-heart' : 'cards-heart-outline'} 
-              size={24} 
-              color="#210011" 
+            <MaterialCommunityIcons
+              name={focused ? 'cards-heart' : 'cards-heart-outline'}
+              size={24}
+              color="#210011"
             />
           ),
         }}
       />
-      <Tab.Screen 
-        name="Perfil" 
+
+      <Tab.Screen
+        name="Perfil"
         component={Perfil}
         options={{
           tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons 
-              name={focused ? 'account' : 'account-outline'} 
-              size={24} 
-              color="#210011" 
+            <MaterialCommunityIcons
+              name={focused ? 'account' : 'account-outline'}
+              size={24}
+              color="#210011"
             />
           ),
         }}
