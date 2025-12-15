@@ -2,7 +2,6 @@ import { Card, Text, Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RenderStar } from './RenderStar';
-import { CommonActions } from '@react-navigation/native';
 
 const Product = ({
   id,
