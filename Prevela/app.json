@@ -1,5 +1,13 @@
 {
   "expo": {
+		"ios": {
+			"bundleIdentifier": "com.prevela.firebase",
+			"googleServicesFile": "/workspaces/prevela-reactnative-expo/Prevela/GoogleService-Info.plist"
+		},
+		"android": {
+			"package": "com.prevela.firebase",
+			"googleServicesFile": "./google-services.json"
+		},
     "name": "Prevela",
     "slug": "Prevela",
     "version": "1.0.0",
@@ -8,6 +16,19 @@
         "projectId": "b9141ff1-b49e-4238-bfc7-c5991a078140"
       }
     },
-    "owner": "prevela"
+    "owner": "prevela",
+    "plugins": [
+			"expo-router",
+			[
+				"expo-build-properties",
+				{
+					"ios": {
+						"useFrameworks": "static"
+					}
+				}
+			],
+			"@react-native-firebase/app",
+			"@react-native-firebase/auth"
+		]
   }
 }

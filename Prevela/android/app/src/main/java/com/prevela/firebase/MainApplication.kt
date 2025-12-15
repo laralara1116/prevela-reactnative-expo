@@ -1,4 +1,4 @@
-package com.prevela
+package com.prevela.firebase
 
 import android.app.Application
 import android.content.res.Configuration
