@@ -4,15 +4,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useState, useEffect } from 'react';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 import Home from './pages/Home';
 import Desejos from './pages/Desejos';
 import Perfil from './pages/Perfil';
 import ProductDetails from './pages/ProductDetails';
+import Login from './pages/Login';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-// Componente com as Tabs
 function TabNavigator() {
   return (
     <Tab.Navigator
@@ -68,13 +71,36 @@ function TabNavigator() {
 }
 
 export default function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" />
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Tabs" component={TabNavigator} />
-          <Stack.Screen name="ProductDetails" component={ProductDetails} />
+          {user ? (
+            <>
+              <Stack.Screen name="Tabs" component={TabNavigator} />
+              <Stack.Screen name="ProductDetails" component={ProductDetails} />
+            </>
+          ) : (
+            <Stack.Screen name="Login" component={Login} />
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
