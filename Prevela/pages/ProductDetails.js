@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 
@@ -69,15 +69,6 @@ export default function ProductDetails({ route, navigation }) {
             <Text style={styles.avaliationText}>({reviews} Avaliações)</Text>
           </View>
         </View>
-        <Button
-          style={styles.button}
-          onPress={handlePress}
-          mode="contained"
-          buttonColor='#fed0ef'
-          textColor='#210011'
-        >
-          Ver Produto
-        </Button>
       </ScrollView>
     </SafeAreaView>
   );

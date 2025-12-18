@@ -11,6 +11,7 @@ import Desejos from './pages/Desejos';
 import Perfil from './pages/Perfil';
 import ProductDetails from './pages/ProductDetails';
 import Login from './pages/Login';
+import Review from './pages/Review';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -98,6 +99,7 @@ export default function App() {
             <>
               <Stack.Screen name="Tabs" component={TabNavigator} />
               <Stack.Screen name="ProductDetails" component={ProductDetails} />
+              <Stack.Screen name ="Review" component={Review} />
             </>
           ) : (
             <Stack.Screen name="Login" component={Login} />
