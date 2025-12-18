@@ -7,6 +7,10 @@ export default function Review() {
     const [text, setText] = React.useState("");
     return(
         <SafeAreaView style={styles.container}>
+            <TouchableOpacity 
+              style={styles.backButton} 
+              onPress={() => navigation.goBack()}
+            >
             <Text style={styles.title}>Fale da sua experiência</Text>
             <TextInput
             style={styles.comment}
@@ -36,7 +40,19 @@ const styles = StyleSheet.create({
   },
   comment: {
     height: 160,
-    paddingTop: 8,
-    paddingHorizontal: 16
-  }
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 16,
+    zIndex: 10,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff0fa',
+    borderRadius: 100,
+    shadowColor: '#000',
+    elevation: 1,
+  },
 });
