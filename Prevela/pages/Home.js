@@ -5,7 +5,7 @@ import { getAuth } from 'firebase/auth';
 import { database } from '../Firebase';
 import SearchTab from '../components/SearchTab';
 import Product from '../components/Product';
-import {  SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
@@ -39,7 +39,7 @@ export default function Home() {
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaProvider>
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <SearchTab />
@@ -65,7 +65,7 @@ export default function Home() {
         )}
       />
     </View>
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
