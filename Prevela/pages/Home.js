@@ -1,14 +1,24 @@
 import { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { ref, onValue } from 'firebase/database';
+import { getAuth } from 'firebase/auth';
 import { database } from '../Firebase';
 import SearchTab from '../components/SearchTab';
 import Product from '../components/Product';
+import {  SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
+  const [displayName, setDisplayName] = useState('');
+  
+  const auth = getAuth();
 
   useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setDisplayName(user.displayName || 'Usuário');
+    }
+
     const produtosRef = ref(database, "produtos");
 
     onValue(produtosRef, (snapshot) => {
@@ -29,12 +39,14 @@ export default function Home() {
   }, []);
 
   return (
+    <SafeAreaView>
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <SearchTab />
       </View>
 
-      <Text style={styles.greeting}>Que bom te ver!</Text>
+      <Text style={styles.display}>{displayName}</Text>
+      <Text style={styles.greeting}>que bom te ver!</Text>
 
       <FlatList
         data={produtos}
@@ -53,6 +65,7 @@ export default function Home() {
         )}
       />
     </View>
+    </SafeAreaView>
   );
 }
 
@@ -70,6 +83,11 @@ const styles = StyleSheet.create({
     fontSize: 26,
     paddingHorizontal: 16,
     marginBottom: 16,
+  },
+  display: {
+    fontSize: 41,
+    paddingHorizontal: 16,
+    fontWeight: 'bold'
   },
   productWrapper: {
     width: '50%',

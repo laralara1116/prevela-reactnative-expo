@@ -8,7 +8,7 @@ import {
   ImageBackground,
   Text
 } from 'react-native';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { TextInput, Button } from 'react-native-paper';
 
 const auth = getAuth();
@@ -16,13 +16,25 @@ const auth = getAuth();
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState('');
+  const [displayName, setDisplayName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false); // Controla se mostra campo de nome
 
   const signUp = async () => {
+    if (!displayName.trim()) {
+      alert('Por favor, digite seu nome');
+      return;
+    }
+    
     setLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      alert('Sucesso!');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      
+      await updateProfile(userCredential.user, {
+        displayName: displayName.trim()
+      });
+      
+      alert('Conta criada com sucesso!');
     } catch (e) {
       alert('O registro falhou: ' + e.message);
     } finally {
@@ -55,6 +67,18 @@ export default function Login() {
         </View>
 
         <KeyboardAvoidingView behavior="padding">
+          {isSignUp && (
+            <TextInput
+              mode='outlined'
+              style={styles.input}
+              value={displayName}
+              onChangeText={setDisplayName}
+              activeOutlineColor='#210011'
+              placeholder="Como quer ser chamado?"
+              label="Nome"
+            />
+          )}
+
           <TextInput
             mode='outlined'
             style={styles.input}
@@ -82,27 +106,52 @@ export default function Login() {
             <ActivityIndicator size='small' style={styles.loader} />
           ) : (
             <>
-              <Button
-                onPress={signIn}
-                mode='contained'
-                style={styles.button}
-                buttonColor='#fed0ef'
-                textColor='#210011'
-              >
-                Entrar
-              </Button>
+              {!isSignUp ? (
+                <>
+                  <Button
+                    onPress={signIn}
+                    mode='contained'
+                    style={styles.button}
+                    buttonColor='#fed0ef'
+                    textColor='#210011'
+                  >
+                    Entrar
+                  </Button>
 
-              <Text style={styles.separator}>Ou</Text>
+                  <Text style={styles.separator}>Ou</Text>
 
-              <Button
-                onPress={signUp}
-                style={styles.button}
-                mode='outlined'
-                buttonColor='white'
-                textColor='#210011'
-              >
-                Criar conta
-              </Button>
+                  <Button
+                    onPress={() => setIsSignUp(true)}
+                    style={styles.button}
+                    mode='outlined'
+                    buttonColor='white'
+                    textColor='#210011'
+                  >
+                    Criar conta
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onPress={signUp}
+                    mode='contained'
+                    style={styles.button}
+                    buttonColor='#fed0ef'
+                    textColor='#210011'
+                  >
+                    Criar conta
+                  </Button>
+
+                  <Button
+                    onPress={() => setIsSignUp(false)}
+                    style={styles.button}
+                    mode='text'
+                    textColor='#210011'
+                  >
+                    Voltar para login
+                  </Button>
+                </>
+              )}
             </>
           )}
         </KeyboardAvoidingView>
