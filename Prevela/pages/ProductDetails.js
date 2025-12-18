@@ -1,50 +1,20 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Button } from 'react-native-paper';
 import Feather from '@expo/vector-icons/Feather';
-
-const RenderStars = ({ rating }) => {
-  const stars = [];
-  const numericRating = parseFloat(rating.toString().replace(',', '.'));
-
-  for (let i = 1; i <= 5; i++) {
-    if (i <= Math.floor(numericRating)) {
-      stars.push(
-        <Feather 
-          key={i} 
-          name="star" 
-          size={18} 
-          color="#FFD700" 
-        />
-      );
-    } else if (i === Math.ceil(numericRating) && numericRating % 1 !== 0) {
-      stars.push(
-        <Feather 
-          key={i} 
-          name="star" 
-          size={18} 
-          color="#FFD700" 
-          style={styles.halfStar} 
-        />
-      );
-    } else {
-      stars.push(
-        <Feather 
-          key={i} 
-          name="star" 
-          size={18} 
-          color="#CCC" 
-        />
-      );
-    }
-  }
-
-  return <View style={styles.starsContainer}>{stars}</View>;
-};
+import { RenderStar } from '../components/RenderStar';
 
 export default function ProductDetails({ route, navigation }) {
   const { title, average, reviews, imageUrl } = route.params || {};
-
+  const goReview = () => {
+  try {
+    navigation.navigate("Review")
+  }
+  catch (error) {
+    console.log("Navigation error:", error);
+  }
+  }
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <TouchableOpacity 
@@ -62,13 +32,18 @@ export default function ProductDetails({ route, navigation }) {
 
         <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
-
-          <View style={styles.ratingRow}>
-            <Text style={styles.ratingText}>{average}</Text>
-            <RenderStars rating={average} />
-            <Text style={styles.avaliationText}>({reviews} Avaliações)</Text>
-          </View>
+          <Text variant="bodyLarge" style={styles.average}>
+            {average} {RenderStar(average)}
+          </Text>
         </View>
+        <Button
+        onPress={goReview}
+        mode="contained"
+        buttonColor='#fed0ef'
+        textColor='#210011'
+        >
+          Fazer avaliação
+        </Button>
       </ScrollView>
     </SafeAreaView>
   );
@@ -78,6 +53,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16
   },
   backButton: {
     position: 'absolute',
@@ -109,26 +85,10 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: '#210011',
   },
-  ratingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-    gap: 8,
+  button: {
+    width: '100%',
   },
-  ratingText: {
-    fontSize: 18,
-    color: '#666',
-  },
-  avaliationText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#666',
-  },
-  starsContainer: {
-    flexDirection: 'row',
-    gap: 4,
-  },
-  halfStar: {
-    opacity: 0.5,
-  },
+  average: {
+    fontSize: 20
+  }
 });

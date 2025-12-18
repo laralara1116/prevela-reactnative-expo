@@ -73,26 +73,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16
   },
   searchContainer: {
     flexDirection: 'row',
-    paddingHorizontal: 16,
     paddingBottom: 16,
   },
   greeting: {
     fontSize: 26,
-    paddingHorizontal: 16,
     marginBottom: 16,
   },
   display: {
     fontSize: 41,
-    paddingHorizontal: 16,
     fontWeight: 'bold'
   },
   productWrapper: {
     width: '50%',
     alignItems: 'center',
-    paddingHorizontal: 16,
     marginBottom: 'auto',
   },
 });

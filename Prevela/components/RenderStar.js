@@ -1,5 +1,4 @@
 import React from 'react';
-import { View } from 'react-native';
 import { Icon } from 'react-native-paper';
 
 export const RenderStar = (average) => {
@@ -12,7 +11,7 @@ export const RenderStar = (average) => {
         <Icon 
           key={i} 
           source="star" 
-          size={16} 
+          size={'auto'} 
           color="#FFD700" 
         />
       );
@@ -21,7 +20,7 @@ export const RenderStar = (average) => {
         <Icon 
           key={i} 
           source="star-half-full" 
-          size={16} 
+          size={'auto'} 
           color="#FFD700" 
         />
       );
@@ -30,8 +29,8 @@ export const RenderStar = (average) => {
         <Icon 
           key={i} 
           source="star-outline" 
-          size={16} 
-          color="#FFD700" 
+          size={'auto'} 
+          color="#666" 
         />
       );
     }
