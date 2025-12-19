@@ -1,24 +1,14 @@
+import { ScrollView, StyleSheet, View, Text, FlatList, Image } from 'react-native';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { ref, onValue } from 'firebase/database';
-import { getAuth } from 'firebase/auth';
 import { database } from '../Firebase';
 import SearchTab from '../components/SearchTab';
 import Product from '../components/Product';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
-  const [displayName, setDisplayName] = useState('');
-  
-  const auth = getAuth();
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      setDisplayName(user.displayName || 'Usuário');
-    }
-
     const produtosRef = ref(database, "produtos");
 
     onValue(produtosRef, (snapshot) => {
@@ -39,33 +29,31 @@ export default function Home() {
   }, []);
 
   return (
-    <SafeAreaProvider>
     <View style={styles.container}>
       <View style={styles.searchContainer}>
         <SearchTab />
       </View>
-
-      <Text style={styles.display}>{displayName}</Text>
-      <Text style={styles.greeting}>que bom te ver!</Text>
+      <Text style={styles.greeting}>Que bom te ver!</Text>
 
       <FlatList
         data={produtos}
         keyExtractor={(item) => item.id.toString()}
         numColumns={2}
-        renderItem={({ item }) => (
+        renderItem={({item}) => (
           <View style={styles.productWrapper}>
-            <Product
-              id={item.id}
-              title={item.nome}
-              imageUrl={item.img}
-              average={item.average ?? "0,0"}
-              reviews={item.reviews ?? 0}
-            />
+            <View style={styles.card}>
+              <Product
+                id={item.id}
+                title={item.nome}
+                imageUrl={item.img}
+                average={item.average ?? "0,0"}
+                reviews={item.reviews ?? 0}
+              />
+            </View>
           </View>
         )}
       />
     </View>
-    </SafeAreaProvider>
   );
 }
 
@@ -73,23 +61,29 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16
+  },
+  scroll: {
+    flex: 1,
   },
   searchContainer: {
-    flexDirection: 'row',
+    paddingHorizontal: 16,
     paddingBottom: 16,
+    flexDirection: 'row',
   },
   greeting: {
     fontSize: 26,
+    paddingHorizontal: 16,
     marginBottom: 16,
   },
-  display: {
-    fontSize: 41,
-    fontWeight: 'bold'
+  card: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   productWrapper: {
     width: '50%',
     alignItems: 'center',
-    marginBottom: 'auto',
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
 });

@@ -11,6 +11,8 @@ export default function Review() {
               style={styles.backButton} 
               onPress={() => navigation.goBack()}
             >
+            </TouchableOpacity>
+            
             <Text style={styles.title}>Fale da sua experiência</Text>
             <TextInput
             style={styles.comment}
