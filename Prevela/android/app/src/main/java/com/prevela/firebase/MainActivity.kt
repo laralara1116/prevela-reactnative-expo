@@ -1,4 +1,4 @@
-package com.prevela
+package com.prevela.firebase
 
 import android.os.Build
 import android.os.Bundle

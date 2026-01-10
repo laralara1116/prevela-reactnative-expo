@@ -1,21 +1,22 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Desejos() {
   return (
-    <SafeAreaProvider>
+    <SafeAreaView>
       <View style={styles.container}>
         <Text>Desejos!</Text>
       </View>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
     flex: 1,
+    paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
   },
 });
