@@ -1,7 +1,10 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'react-native-paper';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../Firebase';
 import Feather from '@expo/vector-icons/Feather';
 import { RenderStar } from '../components/RenderStar';
 
@@ -11,6 +14,31 @@ export default function ProductDetails({ route, navigation }) {
   const goReview = () => {
     navigation.navigate("Review", { productId: id });
   };
+
+  const [reviewsList, setReviewsList] = useState([]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const reviewsRef = ref(database, `avaliacoes/${id}`);
+
+    const unsubscribe = onValue(reviewsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const lista = Object.entries(data).map(([key, value]) => ({
+          id: key,
+          comentario: value.comentario,
+          userId: value.userId,
+        }));
+
+        setReviewsList(lista);
+      } else {
+        setReviewsList([]);
+      }
+    });
+    return () => unsubscribe();
+  }, [id]);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -42,6 +70,34 @@ export default function ProductDetails({ route, navigation }) {
         >
           Fazer avaliação
         </Button>
+
+        <View style={{ marginTop: 24}}>
+          <Text style={{ fontsize: 20, fontWeight: 'bold', marginBottom: 12}}>
+            Avaliações
+          </Text>
+
+          {reviewsList.length === 0 ? (
+            <Text style={{ color: '#666' }}>
+              Nenhuma avaliação ainda. Seja o primeiro!
+            </Text>
+          ) : (
+            reviewsList.map((item) => (
+              <View
+                key={item.id}
+                style={{
+                backgroundColor: '#fff0fa',
+                padding: 12,
+                borderRadius: 8,
+                marginBottom: 10,
+              }} 
+            >
+              <Text style={{ fontSize: 16 }}>
+                {item.comentario}
+              </Text>
+            </View>
+            ))
+        )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
