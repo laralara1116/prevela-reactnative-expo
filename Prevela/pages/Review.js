@@ -1,16 +1,58 @@
-import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { getAuth } from 'firebase/auth';
+import { ref, push } from 'firebase/database';
+import { database } from '../Firebase';
 
 export default function Review() {
     const [text, setText] = React.useState("");
+    const [loading, setLoading] = useState(false);
+
+    const navigation = useNavigation();
+    const route = useRoute();
+
+    const { productId } = route.params;
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    const handleSendReview = async () => {
+      if (!text.trim()) {
+        Alert.alert("Atenção", "Digite um comentário antes de enviar!");
+        return;
+      }
+
+      try {
+        setLoading(true);
+
+        const reviewRef = ref(database, `avaliacoes/${productId}`);
+
+        await push(reviewRef, {
+          userId: user.uid,
+          comentario: text,
+        });
+
+        Alert.alert("Sucesso", "Avaliação enviada! <3");
+        setText("");
+        navigation.goBack();
+      } catch (error) {
+        console.log("Erro ao salvar avaliação:", error);
+        Alert.alert("Erro", "Não foi possível enviar sua avaliação :(");
+      } finally {
+        setLoading (false);
+      }
+    }; 
+
     return(
         <SafeAreaView style={styles.container}>
             <TouchableOpacity 
               style={styles.backButton} 
               onPress={() => navigation.goBack()}
             >
+              <Text>←</Text>
             </TouchableOpacity>
             
             <Text style={styles.title}>Fale da sua experiência</Text>
@@ -23,8 +65,20 @@ export default function Review() {
             multiline
             numberOfLines={8}
             />
+
+            <Button
+            mode="contained"
+            onPress={handleSendReview}
+            loading={loading}
+            style={styles.sendButton}
+            buttonColor="#fed0ef"
+            textColor="#210011"
+            >
+              Enviar avaliação
+            </Button>
+
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -56,5 +110,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     shadowColor: '#000',
     elevation: 1,
+  },
+  sendButton: {
+    marginTop: 20,
+    borderRadius: 8,
   },
 });

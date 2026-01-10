@@ -6,15 +6,12 @@ import Feather from '@expo/vector-icons/Feather';
 import { RenderStar } from '../components/RenderStar';
 
 export default function ProductDetails({ route, navigation }) {
-  const { title, average, reviews, imageUrl } = route.params || {};
+  const { id, title, average, reviews, imageUrl } = route.params || {};
+
   const goReview = () => {
-  try {
-    navigation.navigate("Review")
-  }
-  catch (error) {
-    console.log("Navigation error:", error);
-  }
-  }
+    navigation.navigate("Review", { productId: id });
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <TouchableOpacity 
@@ -36,6 +33,7 @@ export default function ProductDetails({ route, navigation }) {
             {average} {RenderStar(average)}
           </Text>
         </View>
+
         <Button
         onPress={goReview}
         mode="contained"

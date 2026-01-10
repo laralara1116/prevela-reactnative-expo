@@ -19,7 +19,7 @@ const Product = ({
         title,
         average,
         reviews,
-        imageUrl
+        imageUrl,
       });
     } catch (error) {
       console.log("Navigation error:", error);
