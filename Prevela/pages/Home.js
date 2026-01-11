@@ -46,6 +46,7 @@ export default function Home() {
           reviews: totalReviews,
         };
       });
+      lista.sort((a, b) => Number(b.average) - Number(a.average));
 
       setProdutos(lista);
     });
