@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, Icon } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { getAuth } from 'firebase/auth';
 import { ref, push } from 'firebase/database';
@@ -9,6 +9,7 @@ import { database } from '../Firebase';
 
 export default function Review() {
     const [text, setText] = React.useState("");
+    const [rating, setRating] = useState(0);
     const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation();
@@ -20,6 +21,10 @@ export default function Review() {
     const user = auth.currentUser;
 
     const handleSendReview = async () => {
+      if (rating === 0) {
+        Alert.alert("Atenção", "Por favor, selecione uma nota de 1 a 5 estrelas!");
+        return;
+      }
       if (!text.trim()) {
         Alert.alert("Atenção", "Digite um comentário antes de enviar!");
         return;
@@ -27,13 +32,13 @@ export default function Review() {
 
       try {
         setLoading(true);
-
         const reviewRef = ref(database, `avaliacoes/${productId}`);
 
         await push(reviewRef, {
           userId: user.uid,
           comentario: text,
           userName: user.displayName || "Usuário",
+          nota: rating,
         });
 
         Alert.alert("Sucesso", "Avaliação enviada! <3");
@@ -57,6 +62,19 @@ export default function Review() {
             </TouchableOpacity>
             
             <Text style={styles.title}>Fale da sua experiência</Text>
+            
+            <View style={{ flexDirection: 'row', marginBottom: 20, justifyContent: 'center' }}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <TouchableOpacity key={star} onPress={() => setRating(star)}>
+                        <Icon 
+                            source={star <= rating ? "star" : "star-outline"} 
+                            size={40} 
+                            color="#FFD700" 
+                        />
+                    </TouchableOpacity>
+                ))}
+            </View>
+
             <TextInput
             style={styles.comment}
             value={text}
