@@ -33,6 +33,7 @@ export default function Review() {
         await push(reviewRef, {
           userId: user.uid,
           comentario: text,
+          userName: user.displayName || "Usuário",
         });
 
         Alert.alert("Sucesso", "Avaliação enviada! <3");

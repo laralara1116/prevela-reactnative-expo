@@ -30,6 +30,7 @@ export default function ProductDetails({ route, navigation }) {
           id: key,
           comentario: value.comentario,
           userId: value.userId,
+          userName: value.userName || "Usuário",
         }));
 
         setReviewsList(lista);
@@ -72,7 +73,7 @@ export default function ProductDetails({ route, navigation }) {
         </Button>
 
         <View style={{ marginTop: 24}}>
-          <Text style={{ fontsize: 20, fontWeight: 'bold', marginBottom: 12}}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 12}}>
             Avaliações
           </Text>
 
@@ -91,6 +92,10 @@ export default function ProductDetails({ route, navigation }) {
                 marginBottom: 10,
               }} 
             >
+              <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                {item.userName}
+              </Text>
+
               <Text style={{ fontSize: 16 }}>
                 {item.comentario}
               </Text>
