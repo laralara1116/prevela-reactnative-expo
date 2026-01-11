@@ -31,6 +31,7 @@ export default function ProductDetails({ route, navigation }) {
           comentario: value.comentario,
           userId: value.userId,
           userName: value.userName || "Usuário",
+          nota: value.nota || 0,
         }));
 
         setReviewsList(lista);
@@ -95,6 +96,10 @@ export default function ProductDetails({ route, navigation }) {
               <Text style={{fontSize: 20, fontWeight: 'bold'}}>
                 {item.userName}
               </Text>
+
+              <View style={{ flexDirection: 'row', marginVertical: 4 }}>
+                {RenderStar(String(item.nota))} 
+              </View>
 
               <Text style={{ fontSize: 16 }}>
                 {item.comentario}
