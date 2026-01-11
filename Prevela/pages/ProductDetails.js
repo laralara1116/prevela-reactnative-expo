@@ -17,6 +17,14 @@ export default function ProductDetails({ route, navigation }) {
 
   const [reviewsList, setReviewsList] = useState([]);
 
+  const averageNota =
+  reviewsList.length > 0
+    ? (
+        reviewsList.reduce((total, item) => total + Number(item.nota), 0) /
+        reviewsList.length
+      ).toFixed(1)
+    : "0.0";
+
   useEffect(() => {
     if (!id) return;
 
@@ -60,7 +68,7 @@ export default function ProductDetails({ route, navigation }) {
         <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
           <Text variant="bodyLarge" style={styles.average}>
-            {average} {RenderStar(average)}
+            {averageNota} {RenderStar(String(averageNota))}
           </Text>
         </View>
 
@@ -98,8 +106,14 @@ export default function ProductDetails({ route, navigation }) {
               </Text>
 
               <View style={{ flexDirection: 'row', marginVertical: 4 }}>
-                {RenderStar(String(item.nota))} 
+                <Text style={{ marginLeft: 3, color: '#555' }}>
+                {item.nota.toFixed(1)}
+                </Text>
+
+                {RenderStar(String(item.nota))}               
               </View>
+
+              
 
               <Text style={{ fontSize: 16 }}>
                 {item.comentario}
