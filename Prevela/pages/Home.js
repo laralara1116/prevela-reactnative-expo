@@ -7,24 +7,48 @@ import Product from '../components/Product';
 
 export default function Home() {
   const [produtos, setProdutos] = useState([]);
+  const [avaliacoes, setAvaliacoes] = useState({});
 
   useEffect(() => {
     const produtosRef = ref(database, "produtos");
+    const avaliacoesRef = ref(database, "avaliacoes");
 
     onValue(produtosRef, (snapshot) => {
       const data = snapshot.val();
 
-      if (data) {
-        const lista = Object.entries(data).map(([id, produto]) => ({
+          if (!data) return;
+
+    onValue(avaliacoesRef, (snapAvaliacoes) => {
+      const avaliacoesData = snapAvaliacoes.val() || {};
+
+      const lista = Object.entries(data).map(([id, produto]) => {
+        const reviewsProduto = avaliacoesData[id]
+          ? Object.values(avaliacoesData[id])
+          : [];
+
+        const totalReviews = reviewsProduto.length;
+
+        const media =
+          totalReviews > 0
+            ? (
+                reviewsProduto.reduce(
+                  (sum, r) => sum + Number(r.nota || 0),
+                  0
+                ) / totalReviews
+              ).toFixed(1)
+            : "0.0";
+
+        return {
           id,
           nome: produto.nome,
           img: produto.img,
-          average: produto.average || "0,0",
-          reviews: produto.reviews || 0,
-        }));
+          average: media,
+          reviews: totalReviews,
+        };
+      });
 
-        setProdutos(lista);
-      }
+      setProdutos(lista);
+    });
     });
   }, []);
 
