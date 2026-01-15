@@ -1,161 +1,137 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, ScrollView } from 'react-native';
+import { Text, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TextInput, Button } from 'react-native-paper';
-import Feather from '@expo/vector-icons/Feather';
-import { StarRating } from '../components/RenderStar';
+import { TextInput, Button, Icon } from 'react-native-paper';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { getAuth } from 'firebase/auth';
+import { ref, push } from 'firebase/database';
+import { database } from '../Firebase';
 
-export default function Review({ route, navigation }) {
-    const [cheiroRating, setCheiroRating] = useState(0);
-    const [custoRating, setCustoRating] = useState(0);
-    const [durabilidadeRating, setDurabilidadeRating] = useState(0);
-    const [embalagemRating, setEmbalagemRating] = useState(0);
-    const [facilidadeRating, setFacilidadeRating] = useState(0);
-    const [text, setText] = useState("");
-    
-    const handleSubmit = () => {
-        console.log('Avaliações:', {
-            cheiro: cheiroRating,
-            custo: custoRating,
-            durabilidade: durabilidadeRating,
-            embalagem: embalagemRating,
-            facilidade: facilidadeRating,
-            comentario: text
+export default function Review() {
+    const [text, setText] = React.useState("");
+    const [rating, setRating] = useState(0);
+    const [loading, setLoading] = useState(false);
+
+    const navigation = useNavigation();
+    const route = useRoute();
+
+    const { productId } = route.params;
+
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    const handleSendReview = async () => {
+      if (rating === 0) {
+        Alert.alert("Atenção", "Por favor, selecione uma nota de 1 a 5 estrelas!");
+        return;
+      }
+      if (!text.trim()) {
+        Alert.alert("Atenção", "Digite um comentário antes de enviar!");
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const reviewRef = ref(database, `avaliacoes/${productId}`);
+
+        await push(reviewRef, {
+          userId: user.uid,
+          comentario: text,
+          userName: user.displayName || "Usuário",
+          nota: rating,
         });
-    };
-    
+
+        Alert.alert("Sucesso", "Avaliação enviada! <3");
+        setText("");
+        navigation.goBack();
+      } catch (error) {
+        console.log("Erro ao salvar avaliação:", error);
+        Alert.alert("Erro", "Não foi possível enviar sua avaliação :(");
+      } finally {
+        setLoading (false);
+      }
+    }; 
+
     return(
         <SafeAreaView style={styles.container}>
             <TouchableOpacity 
                 style={styles.backButton} 
                 onPress={() => navigation.goBack()}
             >
-                <Feather name="arrow-left" size={24} color="#210011" />
+              <Text>←</Text>
             </TouchableOpacity>
             
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <Text style={styles.title}>Fale da sua experiência</Text>
+            <Text style={styles.title}>Fale da sua experiência</Text>
+            
+            <View style={{ flexDirection: 'row', marginBottom: 20, justifyContent: 'center' }}>
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <TouchableOpacity key={star} onPress={() => setRating(star)}>
+                        <Icon 
+                            source={star <= rating ? "star" : "star-outline"} 
+                            size={40} 
+                            color="#FFD700" 
+                        />
+                    </TouchableOpacity>
+                ))}
+            </View>
 
-                <View style={styles.ratingCard}>
-                    <Text style={styles.subtitle}>Cheiro</Text>
-                    <StarRating 
-                        onRatingChange={(nota) => setCheiroRating(nota)}
-                        initialRating={cheiroRating}
-                    />
-                </View>
+            <TextInput
+            style={styles.comment}
+            value={text}
+            onChangeText={text => setText(text)}
+            mode="outlined"
+            placeholder="Digite seu comentário"
+            multiline
+            numberOfLines={8}
+            />
 
-                <View style={styles.ratingCard}>
-                    <Text style={styles.subtitle}>Custo-benefício</Text>
-                    <StarRating 
-                        onRatingChange={(nota) => setCustoRating(nota)}
-                        initialRating={custoRating}
-                    />
-                </View>
+            <Button
+            mode="contained"
+            onPress={handleSendReview}
+            loading={loading}
+            style={styles.sendButton}
+            buttonColor="#fed0ef"
+            textColor="#210011"
+            >
+              Enviar avaliação
+            </Button>
 
-                <View style={styles.ratingCard}>
-                    <Text style={styles.subtitle}>Durabilidade</Text>
-                    <StarRating 
-                        onRatingChange={(nota) => setDurabilidadeRating(nota)}
-                        initialRating={durabilidadeRating}
-                    />
-                </View>
-
-                <View style={styles.ratingCard}>
-                    <Text style={styles.subtitle}>Embalagem</Text>
-                    <StarRating 
-                        onRatingChange={(nota) => setEmbalagemRating(nota)}
-                        initialRating={embalagemRating}
-                    />
-                </View>
-
-                <View style={styles.ratingCard}>
-                    <Text style={styles.subtitle}>Facilidade de uso</Text>
-                    <StarRating 
-                        onRatingChange={(nota) => setFacilidadeRating(nota)}
-                        initialRating={facilidadeRating}
-                    />
-                </View>
-
-                <TextInput
-                    style={styles.comment}
-                    value={text}
-                    onChangeText={text => setText(text)}
-                    mode="outlined"
-                    outlineColor='#88888A'
-                    activeOutlineColor='#210011'
-                    placeholder="Digite seu comentário"
-                    multiline
-                    numberOfLines={8}
-                    theme={{ colors: { background: '#FFFFFF' } }}
-                />
-
-                <Button
-                    mode="contained"
-                    onPress={handleSubmit}
-                    style={styles.submitButton}
-                    buttonColor='#fed0ef'
-                    textColor='#210011'
-                >
-                    Enviar Avaliação
-                </Button>
-            </ScrollView>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingHorizontal: 16,
-        backgroundColor: '#FFFFFF',
-        paddingTop: 100
-    },
-    backButton: {
-        position: 'absolute',
-        top: 50,
-        left: 16,
-        zIndex: 10,
-        width: 60,
-        height: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff0fa',
-        borderRadius: 100,
-        shadowColor: '#000',
-        elevation: 1,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 24,
-        color: '#210011',
-        textAlign: 'center'
-    },
-    ratingCard: {
-        marginBottom: 16,
-        padding: 16,
-        borderWidth: 1,
-        borderColor: '#88888A',
-        borderRadius: 12,
-        backgroundColor: '#FFF'
-    },
-    subtitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        marginBottom: 12,
-        color: '#210011'
-    },
-    comment: {
-        height: 160,
-        marginTop: 8,
-        marginBottom: 16,
-        backgroundColor: '#FFFFFF',
-    },
-    commentContent: {
-        backgroundColor: '#FFFFFF'
-    },
-    submitButton: {
-        marginBottom: 24,
-        paddingVertical: 6
-    }
+  container: {
+    flex: 1,
+    paddingHorizontal: 16,
+    backgroundColor: '#FFFFFF',
+    paddingTop: 16
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    color: '#210011'
+  },
+  comment: {
+    height: 160,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 16,
+    zIndex: 10,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff0fa',
+    borderRadius: 100,
+    shadowColor: '#000',
+    elevation: 1,
+  },
+  sendButton: {
+    marginTop: 20,
+    borderRadius: 8,
+  },
 });

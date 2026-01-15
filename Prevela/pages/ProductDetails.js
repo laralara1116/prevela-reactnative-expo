@@ -1,20 +1,55 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button } from 'react-native-paper';
+import { ref, onValue } from 'firebase/database';
+import { database } from '../Firebase';
 import Feather from '@expo/vector-icons/Feather';
 import { RenderStar } from '../components/RenderStar';
 
 export default function ProductDetails({ route, navigation }) {
-  const { title, average, reviews, imageUrl } = route.params || {};
+  const { id, title, average, reviews, imageUrl } = route.params || {};
+
   const goReview = () => {
-  try {
-    navigation.navigate("Review")
-  }
-  catch (error) {
-    console.log("Navigation error:", error);
-  }
-  }
+    navigation.navigate("Review", { productId: id });
+  };
+
+  const [reviewsList, setReviewsList] = useState([]);
+
+  const averageNota =
+  reviewsList.length > 0
+    ? (
+        reviewsList.reduce((total, item) => total + Number(item.nota), 0) /
+        reviewsList.length
+      ).toFixed(1)
+    : "0.0";
+
+  useEffect(() => {
+    if (!id) return;
+
+    const reviewsRef = ref(database, `avaliacoes/${id}`);
+
+    const unsubscribe = onValue(reviewsRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const lista = Object.entries(data).map(([key, value]) => ({
+          id: key,
+          comentario: value.comentario,
+          userId: value.userId,
+          userName: value.userName || "Usuário",
+          nota: value.nota || 0,
+        }));
+
+        setReviewsList(lista);
+      } else {
+        setReviewsList([]);
+      }
+    });
+    return () => unsubscribe();
+  }, [id]);
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <TouchableOpacity 
@@ -33,9 +68,10 @@ export default function ProductDetails({ route, navigation }) {
         <View style={styles.content}>
           <Text style={styles.title}>{title}</Text>
           <Text variant="bodyLarge" style={styles.average}>
-            {average} {RenderStar(average)}
+            {averageNota} {RenderStar(String(averageNota))}
           </Text>
         </View>
+
         <Button
         onPress={goReview}
         mode="contained"
@@ -44,6 +80,48 @@ export default function ProductDetails({ route, navigation }) {
         >
           Fazer avaliação
         </Button>
+
+        <View style={{ marginTop: 24}}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 12}}>
+            Avaliações
+          </Text>
+
+          {reviewsList.length === 0 ? (
+            <Text style={{ color: '#666' }}>
+              Nenhuma avaliação ainda. Seja o primeiro!
+            </Text>
+          ) : (
+            reviewsList.map((item) => (
+              <View
+                key={item.id}
+                style={{
+                backgroundColor: '#fff0fa',
+                padding: 12,
+                borderRadius: 8,
+                marginBottom: 10,
+              }} 
+            >
+              <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+                {item.userName}
+              </Text>
+
+              <View style={{ flexDirection: 'row', marginVertical: 4 }}>
+                <Text style={{ marginLeft: 3, color: '#555' }}>
+                {item.nota.toFixed(1)}
+                </Text>
+
+                {RenderStar(String(item.nota))}               
+              </View>
+
+              
+
+              <Text style={{ fontSize: 16 }}>
+                {item.comentario}
+              </Text>
+            </View>
+            ))
+        )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

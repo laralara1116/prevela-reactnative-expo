@@ -13,7 +13,7 @@ export const RenderStar = (average) => {
         <Icon 
           key={i} 
           source="star" 
-          size={'auto'} 
+          size={20} 
           color="#FFD700" 
         />
       );
@@ -22,7 +22,7 @@ export const RenderStar = (average) => {
         <Icon 
           key={i} 
           source="star-half-full" 
-          size={'auto'} 
+          size={20} 
           color="#FFD700" 
         />
       );
@@ -31,7 +31,7 @@ export const RenderStar = (average) => {
         <Icon 
           key={i} 
           source="star-outline" 
-          size={'auto'} 
+          size={20} 
           color="#666" 
         />
       );
